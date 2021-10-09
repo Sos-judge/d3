@@ -15,30 +15,30 @@
     let simulation;
 
     const render_init = function(){//初始化图元
-        lines = svg.selectAll('line').data(links).join('line')
+        lines = svg.selectAll('line').data(links).join('line')//初始化线段图元line
         .attr('stroke', 'black')
         .attr('opacity', 0.8)
         .attr('stroke-width', .5);
         circles = svg.selectAll('circle').data(nodes).join('circle')
         .attr('r', 5)
-        .attr('fill', d => color(d.index))
+        .attr('fill', d1 => color(d1.index))
     }
 
-    function ticked() {
-        lines
-        .attr('x1', d => d.source.x)
-        .attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x)
-        .attr('y2', d => d.target.y);
-        circles
-        .attr('cx', d => d.x)
-        .attr('cy', d => d.y)
+    function ticked() {//设置位置，根据绑定的数据更新状态
+        lines//边的位置
+        .attr('x1', d1 => d1.source.x)
+        .attr('y1', d1 => d1.source.y)
+        .attr('x2', d1 => d1.target.x)
+        .attr('y2', d1 => d1.target.y);
+        circles//点的位置
+        .attr('cx', d1 => d1.x)
+        .attr('cy', d1 => d1.y)
     }
 
     d3.json('k.json').then(data => {
         links = data.links;
         nodes = []
-        for(let i = 0; i <= data['#nodes']; i++ ){
+        for(let i = 0; i <= data['#nodes']; i++ ){//遍历所有节点
             nodes.push({"index":i});
         }
 
@@ -50,8 +50,8 @@
         simulation = d3.forceSimulation(nodes)
         .force('manyBody', d3.forceManyBody().strength(-30))
         .force('center', d3.forceCenter(width / 2, height / 2))
-        .force("link", d3.forceLink(links).strength(0.1).distance(100))
-        .on('tick', ticked);
+        .force("link", d3.forceLink(links).strength(0.1).distance(200))
+        .on('tick', ticked);//事件tick
     })
 
     </script>
