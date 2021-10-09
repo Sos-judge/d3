@@ -15,7 +15,8 @@
     let simulation;
 
     const render_init = function(){//初始化图元
-        lines = svg.selectAll('line').data(links).join('line')//初始化线段图元line
+      //lines = svg.selectAll('line').data(links).enter().append('line')
+        lines = svg.selectAll('line').data(links).join('line')//初始化线段图元line  
         .attr('stroke', 'black')
         .attr('opacity', 0.8)
         .attr('stroke-width', .5);
