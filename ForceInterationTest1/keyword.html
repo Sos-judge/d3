@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .main {
+            width: 850px;
+            height: 600px;
+            background-color: #f4f4f4;
+        }
+        #keyword{
+            width: 100%;
+            height: 100%;
+        }
+        .link {
+            fill: none;
+            stroke: #666;
+            stroke-width: 1.5px;
+        }
+
+        #licensing {
+            fill: green;
+        }
+
+        .link.licensing {
+            stroke: green;
+        }
+
+        .link.resolved {
+            stroke-dasharray: 0,2 1;
+        }
+
+        circle {
+            fill: #ccc;
+            stroke: #333;
+            stroke-width: 1.5px;
+        }
+
+        text {
+            font: 12px Microsoft YaHei;
+            pointer-events: none;
+            text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+        }
+
+        .linetext {
+            font: 12px Microsoft YaHei;
+        }
+
+        .tooltip{
+            position: absolute;
+            height: auto;
+            font-family: "microsoft yahei", simhei;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid #999;
+            padding: 5px;
+            background-color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class='main'>
+    <div id="keyword">
+
+    </div>
+</div>
+<script src="jquery-3.3.1.min.js"></script>
+<script src="d3.v3.min.js"></script>
+<script src="keyword.js"></script>
+</body>
+</html>
