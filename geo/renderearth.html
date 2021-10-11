@@ -33,7 +33,7 @@
 
     // setting up the tip tool; 
     const tip = d3.tip()
-    .attr('class', 'd3-tip').html(function(d) { return d.properties.name });
+    .attr('class', 'd3-tip').html(function(d) { return d.properties.name });//设置图元的标签
     svg.call(tip);
 
     let worldmeta;
