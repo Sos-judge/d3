@@ -23,12 +23,9 @@
 
     // convert dataPath to svgPath; 
     // go to https://github.com/d3/d3-geo for more different projections; 
-    //const projection = d3.geoMercator();
-    //const projection = d3.geoOrthographic();
-    //const projection = d3.geoStereographic();
-    //const projection = d3.geoEquirectangular();
+    
     const projection = d3.geoNaturalEarth1();
-    //const projection = d3.geoTransverseMercator();
+   
     const pathGenerator = d3.geoPath().projection(projection);
 
     // setting up the tip tool; 
@@ -37,7 +34,7 @@
     svg.call(tip);
 
     let worldmeta;
-    let lastid = undefined;
+  
 
     d3.json('countries-110m.json').then(
         function(data){
