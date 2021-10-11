@@ -66,14 +66,11 @@
               .attr("stroke","black")
               .attr("stroke-width",1);
             })
-            .on('contextmenu', function(d){
-              d3.event.preventDefault();
-              if(lastid !== d.properties.name){
+            .on('click', function(d){
+           
                 tip.show(d)
-                lastid = d.properties.name;
-              }else{
-                tip.hide(d)
-              }
+              
+            
             })
         }
     );
