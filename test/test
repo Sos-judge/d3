@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+        const data = [1,2,3,4,5];
+const width = window.innerWidth
+        const height = window.innerHeight
+        const svg = d3.select('body')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .append('g')
+            //.attr('transform', `translate(${ width / 2 }, ${ height / 2 })`)
+            
+        svg.attr('stroke', 'red')
+        
+        const circle0 = svg.append('circle')
+            .attr('r', 40)
+            .attr('fill', 'red')
+        const circle1 = svg.append('circle')
+            .attr('r', 40)
+            .attr('fill', 'red')
+            .attr('transform', `translate(50,50)`)   
+        const circle2 = svg.append('circle')
+            .attr('r', 40)
+            .attr('fill', 'red')
+            .attr('transform', `translate(100,100)`) 
+         const circle3 = svg.append('circle')
+            .attr('r', 40)
+            .attr('fill', 'red')
+            .attr('transform', `translate(150,150)`) 
+        const circle4 = svg.append('circle')
+            .attr('r', 40)
+            .attr('fill', 'red')
+            .attr('transform', `translate(200,200)`) 
+        const circle5 = svg.append('circle')
+            .attr('r', 40)
+            .attr('fill', 'red') 
+            .attr('transform', `translate(250,250)`) 
+            
+c1=svg.selectAll("circle")
+  .data(data)
+ //c1.exit().remove();
+    </script>
+</body>
+</html>
