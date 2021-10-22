@@ -14,9 +14,9 @@ export 
       
   导出单个特性（可以导出var，let，const,function,class）
       
-  export let myVariable = Math.sqrt(2);
+       export let myVariable = Math.sqrt(2);
       
-  export function myFunction() { ... };
+       export function myFunction() { ... };
       
   在导出多个值时，命名导出非常有用。在导入期间，必须使用相应对象的相同名称。
       
@@ -29,7 +29,10 @@ export 
       
   例如nameexport/my-module2.js
       
-  导出单个特性作为默认值export default function () { ... }export default class { .. };
+  导出单个特性作为默认值 
+      
+      export default function () { ... }
+      export default class { .. };
       
   例如nameexport/my-module.js
       
