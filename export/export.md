@@ -5,6 +5,8 @@ export 
       2必须通过 HTTP 服务器运行
 
 有两种不同的导出方式，命名导出和默认导出。
+      
+      
 命名导出（每个模块包含任意数量）
   导出事先定义的特性export { myFunction，myVariable };
   导出单个特性（可以导出var，let，const,function,class）
