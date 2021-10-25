@@ -59,7 +59,6 @@
         .attr('cy', d => d.y)
     }
 
-    // the data is from http://networkrepository.com/socfb-Caltech36.php; 
     d3.json('k.json').then(data => {
         links = data.links;
         nodes = []
