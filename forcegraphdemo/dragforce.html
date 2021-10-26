@@ -18,17 +18,17 @@
     function dragstarted(d) {
         if (!d3.event.active) simulation.alphaTarget(0.3).restart();
         d3.event.subject.fx = d3.event.x;
-  d3.event.subject.fy = d3.event.y;
+        d3.event.subject.fy = d3.event.y;
 }
     
     function dragged(d) {
         d3.event.subject.fx = d3.event.x;
-  d3.event.subject.fy = d3.event.y;
+        d3.event.subject.fy = d3.event.y;
     }
     function dragended(d) {
         if (!d3.event.active) simulation.alphaTarget(0);
-  d3.event.subject.fx = null;
-  d3.event.subject.fy = null;
+        d3.event.subject.fx = null;
+        d3.event.subject.fy = null;
     }
     const drag = d3.drag()
     .on("start", dragstarted)
@@ -60,8 +60,6 @@
         .attr('cy', d => d.y)
     }
   
-
-    // the data is from http://networkrepository.com/socfb-Caltech36.php; 
     d3.json('k.json').then(data => {
         links = data.links;
         nodes = []
@@ -81,12 +79,9 @@
         .force("link", d3.forceLink(links).strength(0.1).distance(100))
         //.alphaTarget(0.1)
         .on('tick ', ticked)
-        
-       
-     
+  
         d3.selectAll('circle').call(drag);
-       
-                
+          
     })
 
     </script>
