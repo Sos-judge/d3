@@ -14,7 +14,7 @@
   <svg width="1800" height="920" id="mainsvg" class="svgs"></svg>  
   <script>
  
-      let svg = d3.select('#mainsvg');
+    let svg = d3.select('#mainsvg');
     var width = svg.attr('width'), height = svg.attr('height');
     let nodes, links;
     let circles, lines;
@@ -26,14 +26,18 @@
     const render_init = function(){
         lines = svg.selectAll('line').data(links)
         .enter().append('line')
+        .attr("class","c1")
         .attr('stroke', 'black')
-        .attr('opacity', 0.8)
-        .attr('stroke-width', .5);
+        .attr('opacity', 1)
+        .attr('stroke-width', 2)
+        .attr('ID',d =>d.value)
 
         circles = svg.selectAll('circle').data(nodes)
         .enter().append('circle')
-        .attr('r', 5)
+        .attr("class","c1")
+        .attr('r', 8)
         .attr('fill', d => color(d.index))
+        .attr('ID',d =>d.index)
       
     }
 
@@ -48,7 +52,7 @@
         .attr('cy', d => d.y)
     }
   
-        d3.json('k.json').then(data => {
+    d3.json('k.json').then(data => {
         links = data.links;
         nodes = []
         for(let i = 0; i <= data['#nodes']; i++ ){
@@ -68,15 +72,16 @@
         var userMenuData = [
           [{
               text: "菜单1",
-             
+              func: function () {
+                window.alert($(this).attr('ID'))
+              }
             } 
           ]
+          
         ];
         // 事件监听方式添加事件绑定
-        $("svg").smartMenu(userMenuData, {
-          name: "chatRightControl",
-          
-        });
+        $(".c1").smartMenu(userMenuData);
+        
              
     })
   </script>  
