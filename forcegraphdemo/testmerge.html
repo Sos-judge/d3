@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+ 
+  <title>menu</title>
+  <script src="http://d3js.org/d3.v5.min.js"></script>
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+  <script src="./smartMenu.js"></script>
+  
+  <link rel="stylesheet" href="./smartMenu.css">
+</head>
+<body>
+  
+  <svg width="1800" height="920" id="mainsvg" class="svgs"></svg>  
+  <script>
+ 
+    let svg = d3.select('#mainsvg');
+    var width = svg.attr('width'), height = svg.attr('height');
+    let nodes, links;
+    let circles, lines;
+    let color;
+    let simulation;
+    let f;
+    function find(x,y,radius)
+    {
+      var i = 0,
+          n = nodes.length,
+          dx,
+          dy,
+          d2,
+          node,
+          closest;
+
+      
+      radius *= radius;
+
+      for (i = 0; i < n; ++i) {
+        node = nodes[i];
+        dx = x - node.x;
+        dy = y - node.y;
+        d2 = dx * dx + dy * dy;
+        
+        if (d2 < radius && d2>0) closest = node;
+        
+      }
+
+      return closest;
+    }
+
+    function dragstarted(d) {
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();//应用drag行为需重启仿真
+        d3.event.subject.fx = d3.event.x;//fx,fy属性设定节点的固定位置
+        d3.event.subject.fy = d3.event.y;// d3.event.subject代表图元绑定的数据，d3.event即当前drag事件
+}
+    
+    function dragged(d) {
+        d3.event.subject.fx = d3.event.x;
+        d3.event.subject.fy = d3.event.y;
+    }
+    function dragended(d) {
+        if (!d3.event.active) simulation.alphaTarget(0);
+        d3.event.subject.fx = null;
+        d3.event.subject.fy = null;
+        f= find( d3.event.x,d3.event.y,20)
+        dragnode=simulation.find(d3.event.x,d3.event.y,5)
+        if(f!==undefined)
+        {   
+            simulation.stop();
+            
+            
+                d3.selectAll("line").each(function (e) {
+                    if (e.source === f) {
+                        e.source=d3.event.subject;
+                    }
+                    if (e.target === f) {
+                        e.target=d3.event.subject;
+                     }
+                    })
+            nodes.splice(f.index,1)
+            circles.data(nodes).exit().remove();
+                simulation.alphaTarget(0).restart();
+        }
+       
+}
+    const drag = d3.drag()//返回一个drag行为
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended);
+
+    
+//图元初始化函数，新增点、线图元，并绑定数据
+    const render_init = function(){
+        lines = svg.selectAll('line').data(links)
+        .enter().append('line')//绑定数据，失配，使用enter策略
+        .attr("class","c1")//属于c1类
+        .attr('stroke', 'black')
+        .attr('opacity', 1)//不透明度
+        .attr('stroke-width', 2)//线的宽度
+        .attr('ID',d =>d.value)//添加属性，被菜单读取
+
+        circles = svg.selectAll('circle').data(nodes)
+        .enter().append('circle')
+        .attr("class","c1")
+        .attr('r', 8)
+        .attr('fill', d => color(d.index))//按color函数设置点的颜色
+        .attr('ID', d =>d.index)//添加属性，被菜单读取
+      
+    }
+    //ticked函数更新图元的状态
+    function ticked() {
+        lines
+        .attr('x1', d => d.source.x)//线的两端坐标更新
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+        circles
+        .attr('cx', d => d.x)//点的圆心坐标更新
+        .attr('cy', d => d.y)
+    }
+  
+    d3.json('k.json').then(data => {//读入json文件的数据
+        links = data.links;
+        nodes = []
+        for(let i = 0; i <= data['#nodes']; i++ ){
+            nodes.push({"index":i});//根据json的节点数量设置nodes数组的成员
+        }
+
+        color = d3.scaleDiverging(d3.interpolateRainbow)//设置颜色函数，将rgb值根据节点数目进行映射
+        .domain([0, nodes.length-1])
+
+        render_init();//初始化
+
+        simulation = d3.forceSimulation(nodes)//开启力模拟
+        .force('manyBody', d3.forceManyBody().strength(-30))//节点斥力
+        .force('center', d3.forceCenter(width / 2, height / 2))//向心力
+        .force("link", d3.forceLink(links).strength(0.1).distance(100))//边两端节点的距离
+        //.alphaTarget(0.1)
+        .on('tick ', ticked)   
+        
+        //设置菜单函数
+        var userMenuData = [
+          [{
+              text: "菜单1",//显示的文本
+              func: function () {//点击后使用的方法
+                window.alert($(this).attr('ID'))//弹出窗口,this即为当前选中的图元 
+              }
+            } 
+          ]
+          
+        ];
+        // 事件监听方式添加事件绑定
+        $(".c1").smartMenu(userMenuData);// 
+
+        d3.selectAll('circle').call(drag);//应用拖拽行为
+       
+        
+    })
+  </script>  
+</body>
+</html>
