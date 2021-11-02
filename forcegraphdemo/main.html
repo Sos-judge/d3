@@ -40,7 +40,7 @@
         dy = y - node.y;
         d2 = dx * dx + dy * dy;
         
-        if (d2 < radius && d2>0) closest = node;
+        if (d2 < radius && d2>1) closest = node;
         
       }
 
@@ -54,18 +54,20 @@
 }
     
     function dragged(d) {
+      
         d3.event.subject.fx = d3.event.x;
         d3.event.subject.fy = d3.event.y;
     }
     function dragended(d) {
+        
         if (!d3.event.active) simulation.alphaTarget(0);
         d3.event.subject.fx = null;
         d3.event.subject.fy = null;
         f= find( d3.event.x,d3.event.y,20)
-        dragnode=simulation.find(d3.event.x,d3.event.y,5)
-        if(f!==undefined)
+        simulation.stop();
+        if(f!==undefined&&f!==d3.event.subject)
         {   
-            simulation.stop();
+           
             
             nodes.splice(f.index,1)
             circles.data(nodes).exit().remove();
@@ -79,8 +81,9 @@
                      }
                     })
             
-                simulation.alphaTarget(0).restart();
+                
         }
+        simulation.alphaTarget(0).restart();
        
 }
     const drag = d3.drag()//返回一个drag行为
