@@ -20,6 +20,32 @@
     let circles, lines;
     let color;
     let simulation;
+    let f;
+    function find(x,y,radius)//find函数，找到与当前节点最近的一个节点
+    {
+      var i = 0,
+          n = nodes.length,
+          dx,
+          dy,
+          d2,
+          node,
+          closest;
+
+      
+      radius *= radius;
+
+      for (i = 0; i < n; ++i) {//遍历每个节点
+        node = nodes[i];
+        dx = x - node.x;
+        dy = y - node.y;
+        d2 = dx * dx + dy * dy;
+        
+        if (d2 < radius && d2>0) closest = node;
+        
+      }
+
+      return closest;
+    }
 
     function dragstarted(d) {
         if (!d3.event.active) simulation.alphaTarget(0.3).restart();//应用drag行为需重启仿真
@@ -35,7 +61,28 @@
         if (!d3.event.active) simulation.alphaTarget(0);
         d3.event.subject.fx = null;
         d3.event.subject.fy = null;
-    }
+        f= find( d3.event.x,d3.event.y,20)
+        dragnode=simulation.find(d3.event.x,d3.event.y,5)
+        if(f!==undefined)
+        {   
+            simulation.stop();
+            
+            nodes.splice(f.index,1)
+            circles.data(nodes).exit().remove();
+            simulation.nodes(nodes)
+                d3.selectAll("line").each(function (e) {
+                    if (e.source === f) {
+                        e.source=d3.event.subject;
+                    }
+                    if (e.target === f) {
+                        e.target=d3.event.subject;
+                     }
+                    })
+            
+                simulation.alphaTarget(0).restart();
+        }
+       
+}
     const drag = d3.drag()//返回一个drag行为
     .on("start", dragstarted)
     .on("drag", dragged)
@@ -89,7 +136,7 @@
         .force('center', d3.forceCenter(width / 2, height / 2))//向心力
         .force("link", d3.forceLink(links).strength(0.1).distance(100))//边两端节点的距离
         //.alphaTarget(0.1)
-        .on('tick ', ticked)   
+        .on('tick ', ticked)   //在每个tick事件发生时更新图元状态
         
         //设置菜单函数
         var userMenuData = [
@@ -103,10 +150,11 @@
           
         ];
         // 事件监听方式添加事件绑定
-        $(".c1").smartMenu(userMenuData);//
+        $(".c1").smartMenu(userMenuData);// 
 
         d3.selectAll('circle').call(drag);//应用拖拽行为
-             
+       
+        
     })
   </script>  
 </body>
