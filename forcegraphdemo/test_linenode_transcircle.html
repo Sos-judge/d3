@@ -13,7 +13,9 @@
 
 <body>
 
-  <svg width="1800" height="920" id="mainsvg" class="svgs"></svg>
+  <svg width="1800" height="920" id="mainsvg" class="svgs">
+    
+  </svg>
   <script>
 
     let svg = d3.select('#mainsvg');
@@ -83,13 +85,14 @@
             e.target = d3.event.subject;
           }
           if (e.source == e.target) {
+            d3.select(this).remove();
            temp=d3.event.subject
             tempnode.push(d3.event.subject)
             alldates = Array.from(new Set(tempnode.map( datum => datum)));
-                curves = svg.append('circle')
+                curves = svg.selectAll('.curve')
                 .data(tempnode)
-                //.enter()
-                //.append('circle')
+                .enter()
+                .append('circle')
                 .attr('r', 20)
                 .attr('class','curve')
                 .attr('fill', 'none')
@@ -98,6 +101,7 @@
                 //.attr('z-index', -1)
                 .attr('transform', `translate(20, 20)`)
                 svg.selectAll('curve').exit().remove() 
+                
               simulation.on('tick ', ticked2)
               
             }
