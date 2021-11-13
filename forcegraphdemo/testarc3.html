@@ -71,7 +71,6 @@
     //2.如果一条边上的两个节点合并，加入曲线图元链接该合并节点 
     //3.
     function dragended(d) {
-
       if (!d3.event.active) simulation.alphaTarget(0);
       d3.event.subject.fx = null;
       d3.event.subject.fy = null;
@@ -99,7 +98,7 @@
             //var y2=e.source.y+100;
             // var d0 = "mx1,y1cx2,y1 x1,y2 x1,y1";
             d1.push(links[e.index]);
-            svg.selectAll(".paths")
+           curves= svg.selectAll(".paths")
               .data(d1)
               .join("path")//加入path
               .attr("class", "paths")
@@ -180,7 +179,7 @@
       circles
         .attr('cx', d => d.x)//点的圆心坐标更新
         .attr('cy', d => d.y)
-      svg.selectAll("path").attr("d", function (d) {
+      curves.attr("d", function (d) {//path更新
         var dx = d.source.x + 8;
         var dy = d.source.y + 8;
         return "M" + dx + ","
