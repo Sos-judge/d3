@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>mark</title>
+  <script src="http://d3js.org/d3.v5.min.js"></script>
+
+</head>
+
+<body>
+
+  <svg width="1800" height="920" id="mainsvg" class="svgs">
+
+  </svg>
+  <script>
+
+    let svg = d3.select('#mainsvg');
+    var width = svg.attr('width'), height = svg.attr('height');
+    let nodes, links;
+    let circles, lines;
+    let curves;
+    let color;
+    let simulation;
+
+
+    var defs = svg.append("defs");//在des内定义箭头
+
+    var arrowMarker1 = defs.append("marker")
+      .attr("id", "arrow1")
+      .attr("markerUnits", "strokeWidth")
+      .attr("markerWidth", "12")
+      .attr("markerHeight", "12")
+      .attr("viewBox", "0 0 12 12")//显示区域
+      .attr("refX", "13")//链接坐标
+      .attr("refY", "6")
+      .attr("orient", "auto");
+
+    var arrow_path1 = "M2,2 L10,6 L2,10 L6,6 L2,2";//线末尾箭头
+
+    arrowMarker1.append("path")
+      .attr("d", arrow_path1)
+      .attr("fill", "black");
+
+
+    //图元初始化函数，新增点、线图元，并绑定数据
+    const render_init = function () {
+      lines = svg.selectAll('line').data(links)
+        .enter().append('line')//绑定数据，失配，使用enter策略
+        .attr("class", "c1")//属于c1类
+        .attr('stroke', 'black')
+        .attr('opacity', 1)//不透明度
+        .attr('stroke-width', 2)//线的宽度
+        .attr('ID', d => d.value)//添加属性，被菜单读取
+        .attr("marker-end", "url(#arrow1)")//在线末尾创建箭头
+      // .attr("marker-mid","url(#arrow2)")
+
+
+      circles = svg.selectAll('circle').data(nodes)
+        .enter().append('circle')
+        .attr("class", "c1")
+        .attr('r', 8)
+        .attr('fill', d => color(d.index))//按color函数设置点的颜色
+        .attr('ID', d => d.index)//添加属性，被菜单读取
+
+    }
+    //ticked函数更新图元的状态
+    function ticked() {
+      lines
+        .attr('x1', d => d.source.x)//线的两端坐标更新
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+      circles
+        .attr('cx', d => d.x)//点的圆心坐标更新
+        .attr('cy', d => d.y)
+
+    }
+    d3.json('kmarktest.json').then(data => {//读入json文件的数据
+      links = data.links;
+      nodes = []
+      for (let i = 0; i <= data['#nodes']; i++) {
+        nodes.push({ "index": i });//根据json的节点数量设置nodes数组的成员
+      }
+
+      color = d3.scaleDiverging(d3.interpolateRainbow)//设置颜色函数，将rgb值根据节点数目进行映射
+        .domain([0, nodes.length - 1])
+
+      render_init();//初始化
+
+      simulation = d3.forceSimulation(nodes)//开启力模拟
+        .force('manyBody', d3.forceManyBody().strength(-30))//节点斥力
+        .force('center', d3.forceCenter(width / 2, height / 2))//向心力
+        .force("link", d3.forceLink(links).strength(0.1).distance(100))//边两端节点的距离
+        //.alphaTarget(0.1)
+        .on('tick ', ticked)   //在每个tick事件发生时更新图元状态
+
+
+
+
+    })
+  </script>
+</body>
+
+</html>
